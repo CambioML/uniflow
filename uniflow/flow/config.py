@@ -79,7 +79,7 @@ class TransformConfig:
         default_factory=lambda: PromptTemplate(
             instruction="""
             Generate one question and its corresponding answer based on the last context in the last
-            example. Follow the format of the examples below to include context, question, and answer in the response
+            example. Follow the format of the examples below to include context, question, and answer in the response.
             """,
             few_shot_prompt=[
                 Context(
@@ -226,7 +226,7 @@ class RaterForClassificationOpenAIGPT4Config(RaterConfig):
             instruction="""
             Evaluate the appropriateness of a given answer based on the question and the context.
             There are few examples below, consisting of context, question, answer, explanation and label.
-            If answer is appropriate, you should give a higher score and vise versa. Check label to score dictionary: {label2score}.
+            If answer is appropriate, you should give a label representing higher score and vise versa. Check label to score dictionary: {label2score}.
             Your response should only focus on the unlabeled sample, including two fields: explanation and label (one of {label_list}).
             """,
             few_shot_prompt=[
@@ -234,14 +234,14 @@ class RaterForClassificationOpenAIGPT4Config(RaterConfig):
                     context="The Eiffel Tower, located in Paris, France, is one of the most famous landmarks in the world. It was constructed in 1889 and stands at a height of 324 meters.",
                     question="When was the Eiffel Tower constructed?",
                     answer="The Eiffel Tower was constructed in 1889.",
-                    explanation="The context explicitly mentions that the Eiffel Tower was constructed in 1889, so the answer is correct.",
+                    explanation="The context explicitly mentions that the Eiffel Tower was constructed in 1889, so the answer is correct and asigned a score of 1.0.",
                     label="Yes",
                 ),
                 Context(
                     context="Photosynthesis is a process used by plants to convert light energy into chemical energy. This process primarily occurs in the chloroplasts of plant cells.",
                     question="Where does photosynthesis primarily occur in plant cells?",
                     answer="Photosynthesis primarily occurs in the mitochondria of plant cells.",
-                    explanation="The context mentions that photosynthesis primarily occurs in the chloroplasts of plant cells, so the answer is incorrect.",
+                    explanation="The context mentions that photosynthesis primarily occurs in the chloroplasts of plant cells, so the answer is incorrect and asigned a score of -1.0.",
                     label="No",
                 ),
             ],
@@ -285,7 +285,7 @@ class RaterForClassificationOpenAIGPT3p5Config(RaterConfig):
             1. context: A brief text containing key information.
             2. question: A query related to the context, testing knowledge that can be inferred or directly obtained from it.
             3. answer: A response to the question.
-            ## Evaluation Criteria: If answer is appropriate, you should give a higher score and vise versa. Check label to score dictionary: {label2score}.
+            ## Evaluation Criteria: If answer is appropriate, you should give a label representing higher score and vise versa. Check label to score dictionary: {label2score}.
             ## Response Format: Your response should only include two fields below:
             1. explanation: Reasoning behind your judgment, explaining why the answer is appropriate or not.
             2. label: Your judgment (one of {label_list}).
@@ -296,14 +296,14 @@ class RaterForClassificationOpenAIGPT3p5Config(RaterConfig):
                     context="The Eiffel Tower, located in Paris, France, is one of the most famous landmarks in the world. It was constructed in 1889 and stands at a height of 324 meters.",
                     question="When was the Eiffel Tower constructed?",
                     answer="The Eiffel Tower was constructed in 1889.",
-                    explanation="The context explicitly mentions that the Eiffel Tower was constructed in 1889, so the answer is correct.",
+                    explanation="The context explicitly mentions that the Eiffel Tower was constructed in 1889, so the answer is correct and asigned a score of 1.0.",
                     label="Yes",
                 ),
                 Context(
                     context="Photosynthesis is a process used by plants to convert light energy into chemical energy. This process primarily occurs in the chloroplasts of plant cells.",
                     question="Where does photosynthesis primarily occur in plant cells?",
                     answer="Photosynthesis primarily occurs in the mitochondria of plant cells.",
-                    explanation="The context mentions that photosynthesis primarily occurs in the chloroplasts of plant cells, so the answer is incorrect.",
+                    explanation="The context mentions that photosynthesis primarily occurs in the chloroplasts of plant cells, so the answer is incorrect and asigned a score of -1.0.",
                     label="No",
                 ),
             ],
@@ -401,33 +401,17 @@ class RaterForGeneratedAnswerOpenAIGPT4Config(RaterConfig):
             instruction="""
             Compare two answers: a generated answer and a grounding answer based on a provided context and question.
             There are few annotated examples below, consisting of context, question, grounding answer, generated answer, explanation and label.
-            If generated answer is better, you should give a higher score and vise versa. Check label to score dictionary: {label2score}.
+            If generated answer is better, you should give a label representing higher score and vise versa. Check label to score dictionary: {label2score}.
             Your response should only focus on the unlabeled sample, including two fields: explanation and label (one of {label_list}).
             """,
             few_shot_prompt=[
                 Context(
-                    context="Early computers were built to perform a series of single tasks, like a calculator. Basic operating system could automatically run different programs in succession to speed up processing.",
+                    context="Early computers were built to perform a series of single tasks, like a calculator.",
                     question="Did early computers function like modern calculators?",
                     grounding_answer="No. Early computers were used primarily for complex calculating.",
                     generated_answer="Yes. Early computers were built to perform a series of single tasks, similar to a calculator.",
-                    explanation="The generated answer is better because it correctly captures the essence of the early computers' functionality, which was to perform single tasks akin to calculators.",
+                    explanation="The generated answer is better because it correctly figures out early computers was used to perform single tasks akin to calculators and asigned a score of 1.0.",
                     label="accept",
-                ),
-                Context(
-                    context="Operating systems did not exist in their modern and more complex forms until the early 1960s. Hardware features were added, that enabled use of runtime libraries, interrupts, and parallel processing.",
-                    question="When did operating systems start to resemble their modern forms?",
-                    grounding_answer="Operating systems started to resemble their modern forms in the early 1960s.",
-                    generated_answer="Modern and more complex forms of operating systems began to emerge in the early 1960s.",
-                    explanation="Both answers are equally good as they accurately pinpoint the early 1960s as the period when modern operating systems began to develop.",
-                    label="equivalent",
-                ),
-                Context(
-                    context="Operating systems did not exist in their modern and more complex forms until the early 1960s. Hardware features were added, that enabled use of runtime libraries, interrupts, and parallel processing.",
-                    question="What features were added to hardware in the 1960s?",
-                    grounding_answer="Hardware in the 1960s saw the addition of features like runtime libraries and parallel processing.",
-                    generated_answer="The 1960s saw the addition of input output control and compatible timesharing capabilities in hardware.",
-                    explanation="The generated answer is worse because it inaccurately suggests the addition of capabilities of hardware in 1960s which is not supported by the context.",
-                    label="reject",
                 ),
             ],
         )
@@ -477,7 +461,7 @@ class RaterForGeneratedAnswerOpenAIGPT3p5Config(RaterConfig):
             2. question: A query related to the context, testing knowledge that can be inferred or directly obtained from it.
             3. grounding Answer: Pre-formulated, usually from human.
             4. generated Answer: From a language model.
-            ## Evaluation Criteria: If generated answer is better, you should give a higher score and vise versa. Check label to score dictionary: {label2score}.
+            ## Evaluation Criteria: If generated answer is better, you should give a label representing higher score and vise versa. Check label to score dictionary: {label2score}.
             ## Response Format: Your response should only include two fields below:
             1. explanatoin: Reasoning behind your judgment, detailing why the generated answer is better, equivalent or worse.
             2. label: Your judgment (one of {label_list}).
@@ -486,27 +470,27 @@ class RaterForGeneratedAnswerOpenAIGPT3p5Config(RaterConfig):
             """,
             few_shot_prompt=[
                 Context(
-                    context="Early computers were built to perform a series of single tasks, like a calculator. Basic operating system could automatically run different programs in succession to speed up processing.",
+                    context="Early computers were built to perform a series of single tasks, like a calculator.",
                     question="Did early computers function like modern calculators?",
                     grounding_answer="No. Early computers were used primarily for complex calculating.",
                     generated_answer="Yes. Early computers were built to perform a series of single tasks, similar to a calculator.",
-                    explanation="The generated answer is better because it correctly captures the essence of the early computers' functionality, which was to perform single tasks akin to calculators.",
+                    explanation="The generated answer is better because it correctly figures out early computers was used to perform single tasks akin to calculators and asigned a score of 1.0.",
                     label="accept",
                 ),
                 Context(
-                    context="Operating systems did not exist in their modern and more complex forms until the early 1960s. Hardware features were added, that enabled use of runtime libraries, interrupts, and parallel processing.",
+                    context="Operating systems(OS) did not exist in their modern and more complex forms until the early 1960s.",
                     question="When did operating systems start to resemble their modern forms?",
                     grounding_answer="Operating systems started to resemble their modern forms in the early 1960s.",
                     generated_answer="Modern and more complex forms of operating systems began to emerge in the early 1960s.",
-                    explanation="Both answers are equally good as they accurately pinpoint the early 1960s as the period when modern operating systems began to develop.",
+                    explanation="The generated answer is as equally good as grounding answer because they both accurately pinpoint the early 1960s as the period when modern operating systems began to develop and asigned a score of 0.0.",
                     label="equivalent",
                 ),
                 Context(
-                    context="Operating systems did not exist in their modern and more complex forms until the early 1960s. Hardware features were added, that enabled use of runtime libraries, interrupts, and parallel processing.",
+                    context="Hardware features were added, that enabled use of runtime libraries, interrupts, and parallel processing in the 1960s.",
                     question="What features were added to hardware in the 1960s?",
                     grounding_answer="Hardware in the 1960s saw the addition of features like runtime libraries and parallel processing.",
                     generated_answer="The 1960s saw the addition of input output control and compatible timesharing capabilities in hardware.",
-                    explanation="The generated answer is worse because it inaccurately suggests the addition of capabilities of hardware in 1960s which is not supported by the context.",
+                    explanation="The generated answer is worse because it inaccurately suggests the addition of capabilities of hardware in 1960s which is not supported by the context and asigned a score of -1.0.",
                     label="reject",
                 ),
             ],
